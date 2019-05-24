@@ -8,11 +8,36 @@ class YourComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: null
+            data: null,
+            page: 1,
+        }
+
+        // This binding is necessary to make `this` work in the callback
+        this.pageFwd = this.pageFwd.bind(this);
+        this.pageRev = this.pageRev.bind(this);
+
+    }
+
+    pageFwd() {
+        if (this.state.page < 38) {
+            this.setState({ page: this.state.page + 1 },
+                () => {
+                    this.doStuff();
+                });
+        }
+
+    }
+    pageRev() {
+        if (this.state.page > 1) {
+            this.setState({ page: this.state.page - 1 },
+                () => {
+                    this.doStuff();
+                });
         }
     }
 
-    componentDidMount() {
+    doStuff() {
+        console.log(this.state.page);
         const axios = require('axios');
 
         var pokeboy;
@@ -23,7 +48,7 @@ class YourComponent extends React.Component {
 
         console.log('pre async');
 
-        for (var i = 1; i <= 20; i++) {
+        for (var i = (this.state.page * 15) - 14; i <= (this.state.page * 15); i++) {
             axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
                 .then(function (response) {
                     // handle success
@@ -46,6 +71,10 @@ class YourComponent extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.doStuff();
+    }
+
     renderList = data => {
         return (
             <ul>
@@ -65,16 +94,28 @@ class YourComponent extends React.Component {
     render() {
         const { data } = this.state;
 
-        return (<div>
-            POKEMON INFO
+        return (
+            <div>
+                <button onClick={this.pageRev}>
+                    Page Back
+                </button>
+                <button onClick={this.pageFwd}>
+                    Page Forward
+                </button>
+                {this.state.page}
+
+                <br></br>
+
+                POKEMON INFO
             {this.state.data === null ?
-                <div>Loading</div>
-                :
-                <div>
-                    {this.renderList(data)}
-                </div>
-            }
-        </div>);
+                    <div>Loading</div>
+                    :
+                    <div>
+                        {this.renderList(data)}
+                    </div>
+                }
+            </div>
+        );
     }
 }
 
