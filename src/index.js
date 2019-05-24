@@ -22,49 +22,66 @@ class YourComponent extends React.Component {
 
         console.log('pre async');
 
-        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?name=Pikachu")
-            .then(function (response) {
-                // handle success
-                that.setState();
-                console.log('async');
+        // // return Pikachu
+        // axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?name=Pikachu")
+        //     .then(function (response) {
+        //         // handle success
+        //         that.setState();
+        //         console.log('async');
 
-                console.log(response);
+        //         // console.log(response);
+        //         pokeboy = response.data.data[0];
+        //         // console.log(pokeboy.id);
+        //         // console.log(pokeboy.image);
+        //         // console.log(pokeboy.name);
+        //         // console.log(pokeboy.types[0]);
 
-                pokeboy = response.data.data[0];
+        //         var array = [pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]];
 
-                //that.setState({pokeboy: pokeboy});
+        //         setState({ data: array });
+        //     })
+        //     .catch(function (error) {
+        //         // handle error
+        //         console.log(error);
+        //     })
 
-                console.log(pokeboy.id);
-                console.log(pokeboy.image);
-                console.log(pokeboy.name);
-                console.log(pokeboy.types[0]);
-
-                var array = [pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]];
-
-                setState({ data: array });
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
+        // return EVERYTHING
+        console.log('before axios');
+        for (var i = 1; i <= 20; i++) {
+            axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+        console.log('after axios');
 
     }
 
     render() {
-        return (<div>
+        return (
+        <div>
             POKEMON INFO
+
             {this.state.data === null ?
                 <div>Loading</div>
                 :
                 <div>
+
                     {this.state.data[0]} <br></br>
+
+
                     <img src={this.state.data[1]}></img> <br></br>
                     {this.state.data[2]} <br></br>
                     {this.state.data[3]} <br></br>
 
                 </div>
             }
-        </div>);
+        </div>
+        
+        );
     }
 }
 
