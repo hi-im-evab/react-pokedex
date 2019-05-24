@@ -14,11 +14,6 @@ class YourComponent extends React.Component {
     componentDidMount() {
         const axios = require('axios');
 
-        var pokeboy;
-
-        const that = this
-        const setState = this.setState.bind(this);
-
         console.log('pre async');
 
         // return EVERYTHING
@@ -27,10 +22,8 @@ class YourComponent extends React.Component {
             axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
                 .then(function (response) {
                     console.log(response);
+                    setState(response);
                 })
-                .catch((error) => {
-                    console.log(error);
-                });
         }
         console.log('after axios');
 
