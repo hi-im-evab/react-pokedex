@@ -10,34 +10,40 @@ class YourComponent extends React.Component {
         this.state = {
             data: null,
             page: 1,
+            startPage: 1,
+            endPage: 37
         }
-
-        // This binding is necessary to make `this` work in the callback
         this.pageFwd = this.pageFwd.bind(this);
         this.pageRev = this.pageRev.bind(this);
-
     }
+
+    // pageFwd() and pageRev() control which range of pokemon are showing.
+    // Currently only works by ID
 
     pageFwd() {
-        if (this.state.page < 38) {
+        // Advance 1 page if not on last page
+        if (this.state.page < this.state.endPage) {
             this.setState({ page: this.state.page + 1 },
                 () => {
-                    this.doStuff();
+                    this.loadPokemon();
                 });
         }
-
     }
+
     pageRev() {
-        if (this.state.page > 1) {
+        // Go back 1 page if not on first page
+        if (this.state.page > this.state.startPage) {
             this.setState({ page: this.state.page - 1 },
                 () => {
-                    this.doStuff();
+                    this.loadPokemon();
                 });
         }
     }
 
-    doStuff() {
-        console.log(this.state.page);
+    // Load in Pokemon
+    // range based on ID and page number
+    // ex) pg 3 shows IDs 31-45
+    loadPokemon() {
         const axios = require('axios');
 
         var pokeboy;
@@ -45,8 +51,6 @@ class YourComponent extends React.Component {
 
         const that = this
         const setState = this.setState.bind(this);
-
-        console.log('pre async');
 
         for (var i = (this.state.page * 15) - 14; i <= (this.state.page * 15); i++) {
             axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
@@ -72,7 +76,7 @@ class YourComponent extends React.Component {
     }
 
     componentDidMount() {
-        this.doStuff();
+        this.loadPokemon();
     }
 
     renderList = data => {
@@ -114,6 +118,16 @@ class YourComponent extends React.Component {
                         {this.renderList(data)}
                     </div>
                 }
+
+                <br></br>
+
+                <button onClick={this.pageRev}>
+                    Page Back
+                </button>
+                <button onClick={this.pageFwd}>
+                    Page Forward
+                </button>
+                {this.state.page}
             </div>
         );
     }
