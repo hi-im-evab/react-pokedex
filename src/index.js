@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
+// import * as serviceWorker from './serviceWorker';
 
 class YourComponent extends React.Component {
     constructor(props) {
@@ -14,48 +15,61 @@ class YourComponent extends React.Component {
     componentDidMount() {
         const axios = require('axios');
 
+        var pokeboy;
+
+        const that = this
+        const setState = this.setState.bind(this);
+
         console.log('pre async');
 
-        // return EVERYTHING
-        console.log('before axios');
-        for (var i = 1; i <= 20; i++) {
-            axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
-                .then(function (response) {
-                    console.log(response);
-                    setState(response);
-                })
-        }
-        console.log('after axios');
+        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?name=Pikachu")
+            .then(function (response) {
+                // handle success
+                that.setState();
+                console.log('async');
+
+                console.log(response);
+
+                pokeboy = response.data.data[0];
+
+                //that.setState({pokeboy: pokeboy});
+
+                console.log(pokeboy.id);
+                console.log(pokeboy.image);
+                console.log(pokeboy.name);
+                console.log(pokeboy.types[0]);
+
+                var array = [pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]];
+
+                setState({ data: array });
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
 
     }
 
     render() {
-        return (
-            <div>
-                POKEMON INFO
-    
+        return (<div>
+            POKEMON INFO
             {this.state.data === null ?
-                    <div>Loading</div>
-                    :
-                    <div>
+                <div>Loading</div>
+                :
+                <div>
+                    {this.state.data[0]} <br></br>
+                    <img src={this.state.data[1]}></img> <br></br>
+                    {this.state.data[2]} <br></br>
+                    {this.state.data[3]} <br></br>
 
-                        {this.state.data[0]} <br></br>
-
-
-                        <img src={this.state.data[1]}></img> <br></br>
-                        {this.state.data[2]} <br></br>
-                        {this.state.data[3]} <br></br>
-
-                    </div>
-                }
-            </div>
-
-        );
+                </div>
+            }
+        </div>);
     }
 }
 
 ReactDOM.render(
-    // <App />,
+    // <Game />,
     <YourComponent />,
     document.getElementById('root')
 );

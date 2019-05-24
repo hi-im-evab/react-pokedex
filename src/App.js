@@ -1,38 +1,26 @@
-//https://github.com/MaximeHeckel/react-suspense-example/
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-import React, { Suspense, Fragment, memo } from "react";
-import { unstable_createResource } from "react-cache";
-
-const axios = require('axios');
-
-const Fetcher = unstable_createResource(() =>
-    // axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/1")
-    fetch("https://jsonplaceholder.typicode.com/todos").then(r => r.json())
-);
-
-const List = () => {
-    const data = Fetcher.read();
-    return (
-        <div>fucking hell</div>
-        // <ul>
-        //     {data.map(item => (
-        //         <li style={{ listStyle: "none" }}>
-        //             {item}
-        //         </li>
-        //     ))}
-        // </ul>
-    );
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
 
-const App = () => (
-    <Fragment>
-        <h2 style={{ textAlign: "center" }}>{`React: ${React.version} Demo`}</h2>
-        <Suspense fallback={<div>Loading...</div>}>
-            <List />
-        </Suspense>
-    </Fragment>
-);
-
-const MemoApp = memo(App);
-
-export default MemoApp;
+export default App;
