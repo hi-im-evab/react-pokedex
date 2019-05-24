@@ -16,52 +16,63 @@ class YourComponent extends React.Component {
         const axios = require('axios');
 
         var pokeboy;
+        var array = [];
 
         const that = this
         const setState = this.setState.bind(this);
 
         console.log('pre async');
 
-        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?name=Pikachu")
-            .then(function (response) {
-                // handle success
-                that.setState();
-                console.log('async');
+        for (var i = 1; i <= 555; i++) {
+            axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
+                .then(function (response) {
+                    // handle success
+                    that.setState();
+                    console.log(response.data.data);
 
-                console.log(response);
+                    pokeboy = response.data.data;
 
-                pokeboy = response.data.data[0];
+                    console.log(pokeboy.id);
+                    console.log(pokeboy.image);
+                    console.log(pokeboy.name);
+                    console.log(pokeboy.types[0]);
 
-                //that.setState({pokeboy: pokeboy});
+                    array.push([pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]]);
 
-                console.log(pokeboy.id);
-                console.log(pokeboy.image);
-                console.log(pokeboy.name);
-                console.log(pokeboy.types[0]);
+                    setState({ data: array });
+                })
+        }
 
-                var array = [pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]];
 
-                setState({ data: array });
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
 
     }
 
+    renderList = data => {
+        return (
+            <ul>
+                {data.map(item => (
+                    <li style={{ listStyle: "none" }} key={item[0]}>
+                        {item[0]} <br></br>
+                        <img src={item[1]}></img> <br></br>
+                        {item[2]} <br></br>
+                        {item[3]} <br></br>
+                        <br></br>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+
     render() {
+        const { data } = this.state;
+
         return (<div>
             POKEMON INFO
             {this.state.data === null ?
                 <div>Loading</div>
                 :
                 <div>
-                    {this.state.data[0]} <br></br>
-                    <img src={this.state.data[1]}></img> <br></br>
-                    {this.state.data[2]} <br></br>
-                    {this.state.data[3]} <br></br>
-
+                    {this.renderList(data)}
                 </div>
             }
         </div>);
@@ -69,7 +80,6 @@ class YourComponent extends React.Component {
 }
 
 ReactDOM.render(
-    // <Game />,
     <YourComponent />,
     document.getElementById('root')
 );
