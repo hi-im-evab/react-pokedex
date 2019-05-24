@@ -23,28 +23,27 @@ class YourComponent extends React.Component {
 
         console.log('pre async');
 
-        for (var i = 1; i <= 555; i++) {
+        for (var i = 1; i <= 20; i++) {
             axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
                 .then(function (response) {
                     // handle success
                     that.setState();
-                    console.log(response.data.data);
 
                     pokeboy = response.data.data;
 
-                    console.log(pokeboy.id);
-                    console.log(pokeboy.image);
-                    console.log(pokeboy.name);
-                    console.log(pokeboy.types[0]);
-
+                    // get select attributes from data
                     array.push([pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]]);
+
+                    // sort array numerically by ID
+                    array.sort(function (a, b) {
+                        if (a[0] < b[0]) return -1;
+                        if (a[0] > b[0]) return 1;
+                        return 0;
+                    });
 
                     setState({ data: array });
                 })
         }
-
-
-
     }
 
     renderList = data => {
