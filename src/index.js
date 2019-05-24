@@ -61,11 +61,8 @@ import App from './App';
 //     }
 // }
 
-const REACT_VERSION = React.version;
-
 ReactDOM.render(
-    // <App />,
-    <div>React version: {REACT_VERSION}</div>,
+    <App />,
     document.getElementById('root')
 );
 
