@@ -16,7 +16,6 @@ class App extends Component {
 
     // pageFwd() and pageRev() control which range of pokemon are showing.
     // Currently only works by ID
-
     pageFwd() {
         // Advance 1 page if not on last page
         if (this.state.page < this.state.endPage) {
@@ -53,27 +52,43 @@ class App extends Component {
         const that = this
         const setState = this.setState.bind(this);
 
-        for (var i = (this.state.page * 15) - 14; i <= (this.state.page * 15); i++) {
-            axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
-                .then(function (response) {
-                    // handle success
-                    that.setState();
-
-                    pokeboy = response.data.data;
+        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?page=2")
+            .then(function (response) {
+                for (var i = 0; i < 15; i++) {
+                    pokeboy = response.data.data[i];
 
                     // get select attributes from data
-                    array.push([pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]]);
+                    array.push([pokeboy.id, pokeboy.image, pokeboy.name]);
+                }
 
-                    // sort array numerically by ID
-                    array.sort(function (a, b) {
-                        if (a[0] < b[0]) return -1;
-                        if (a[0] > b[0]) return 1;
-                        return 0;
-                    });
+                setState({ data: array });
+            })
 
-                    setState({ data: array });
-                })
-        }
+        /*
+        * This is almost certainly not right.
+        * 15 almost-simultaneous requests can't be right.
+        */
+        // for (var i = (this.state.page * 15) - 14; i <= (this.state.page * 15); i++) {
+        //     axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
+        //         .then(function (response) {
+        //             // handle success
+        //             that.setState();
+
+        //             pokeboy = response.data.data;
+
+        //             // get select attributes from data
+        //             array.push([pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]]);
+
+        //             // sort array numerically by ID
+        //             array.sort(function (a, b) {
+        //                 if (a[0] < b[0]) return -1;
+        //                 if (a[0] > b[0]) return 1;
+        //                 return 0;
+        //             });
+
+        //             setState({ data: array });
+        //         })
+        // }
     }
 
     componentDidMount() {
@@ -84,7 +99,7 @@ class App extends Component {
         return (
             <ul>
                 {data.map(item => (
-                    <li style={{ listStyle: "none" }} key={item[0]}>
+                    <li onClick={this.loadDetails} style={{ listStyle: "none" }} key={item[0]}>
                         {item[0]} <br></br>
                         <img src={item[1]}></img> <br></br>
                         {item[2]} <br></br>
@@ -114,7 +129,7 @@ class App extends Component {
                 {this.state.data === null ?
                     <div>Loading</div>
                     :
-                    <div onClick={this.loadDetails}>
+                    <div>
                         {this.renderList(data)}
                     </div>
                 }
