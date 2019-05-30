@@ -8,14 +8,12 @@ class App extends Component {
             data: null,
             page: 1,
             startPage: 1,
-            endPage: 37
+            endPage: 36
         }
         this.pageFwd = this.pageFwd.bind(this);
         this.pageRev = this.pageRev.bind(this);
     }
 
-    // pageFwd() and pageRev() control which range of pokemon are showing.
-    // Currently only works by ID
     pageFwd() {
         // Advance 1 page if not on last page
         if (this.state.page < this.state.endPage) {
@@ -46,16 +44,14 @@ class App extends Component {
     loadPokemon() {
         const axios = require('axios');
 
-        var pokeboy;
         var array = [];
 
-        const that = this
         const setState = this.setState.bind(this);
 
         axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?page=" + this.state.page)
             .then(function (response) {
                 for (var i = 0; i < 15; i++) {
-                    pokeboy = response.data.data[i];
+                    var pokeboy = response.data.data[i];
 
                     // get select attributes from data
                     array.push([pokeboy.id, pokeboy.image, pokeboy.name]);
@@ -71,16 +67,16 @@ class App extends Component {
 
     renderList = data => {
         return (
-            <ul>
+            <div>
                 {data.map(item => (
-                    <li onClick={this.loadDetails} style={{ listStyle: "none" }} key={item[0]}>
+                    <div className="pokemon" onClick={this.loadDetails} key={item[0]}>
                         {item[0]} <br></br>
                         <img src={item[1]}></img> <br></br>
                         {item[2]} <br></br>
                         <br></br>
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
         )
     }
 
@@ -89,34 +85,34 @@ class App extends Component {
 
         return (
             <div>
-                <button onClick={this.pageRev}>
-                    Page Back
-                </button>
-                <button onClick={this.pageFwd}>
-                    Page Forward
-                </button>
-                {this.state.page}
+                <div className="nav" id="top-nav">
+                    <button onClick={this.pageRev}>
+                        Page Back
+                    </button>
+                    <button onClick={this.pageFwd}>
+                        Page Forward
+                    </button>
+                    {this.state.page}
+                </div>
 
-                <br></br>
-
-                POKEMON INFO
+                POKEMON!
                 {this.state.data === null ?
                     <div>Loading</div>
                     :
-                    <div>
+                    <div className="pokemon-list">
                         {this.renderList(data)}
                     </div>
                 }
 
-                <br></br>
-
-                <button onClick={this.pageRev}>
-                    Page Back
-                </button>
-                <button onClick={this.pageFwd}>
-                    Page Forward
-                </button>
-                {this.state.page}
+                <div className="nav" id="bottom-nav">
+                    <button onClick={this.pageRev}>
+                        Page Back
+                    </button>
+                    <button onClick={this.pageFwd}>
+                        Page Forward
+                    </button>
+                    {this.state.page}
+                </div>
             </div>
         );
     }

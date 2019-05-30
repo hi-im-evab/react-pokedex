@@ -1,5 +1,11 @@
-li {
+.pokemon {
     width: max-content;
     border: 1px solid black;
     margin: 6px;
+    padding: 0;
+    float: left;
+}
+
+#bottom-nav {
+    clear: both;
 }
