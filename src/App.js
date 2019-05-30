@@ -70,10 +70,9 @@ class App extends Component {
             <div>
                 {data.map(item => (
                     <div className="pokemon" onClick={this.loadDetails} key={item[0]}>
-                        {item[0]} <br></br>
-                        <img src={item[1]}></img> <br></br>
-                        {item[2]} <br></br>
-                        <br></br>
+                        {item[0]}
+                        <img src={item[1]}></img>
+                        {item[2]} 
                     </div>
                 ))}
             </div>
