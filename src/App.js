@@ -52,7 +52,7 @@ class App extends Component {
         const that = this
         const setState = this.setState.bind(this);
 
-        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?page=2")
+        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?page=" + this.state.page)
             .then(function (response) {
                 for (var i = 0; i < 15; i++) {
                     pokeboy = response.data.data[i];
@@ -63,32 +63,6 @@ class App extends Component {
 
                 setState({ data: array });
             })
-
-        /*
-        * This is almost certainly not right.
-        * 15 almost-simultaneous requests can't be right.
-        */
-        // for (var i = (this.state.page * 15) - 14; i <= (this.state.page * 15); i++) {
-        //     axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon/" + i)
-        //         .then(function (response) {
-        //             // handle success
-        //             that.setState();
-
-        //             pokeboy = response.data.data;
-
-        //             // get select attributes from data
-        //             array.push([pokeboy.id, pokeboy.image, pokeboy.name, pokeboy.types[0]]);
-
-        //             // sort array numerically by ID
-        //             array.sort(function (a, b) {
-        //                 if (a[0] < b[0]) return -1;
-        //                 if (a[0] > b[0]) return 1;
-        //                 return 0;
-        //             });
-
-        //             setState({ data: array });
-        //         })
-        // }
     }
 
     componentDidMount() {
