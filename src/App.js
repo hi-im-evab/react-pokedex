@@ -46,8 +46,8 @@ class App extends Component {
 
                     //  push all attributes and types to array
                     array.push([pokemon.id, pokemon.image, pokemon.name, types]);
-
                 }
+
                 setState({ data: array });
             });
     }
@@ -66,7 +66,7 @@ class App extends Component {
                     if (i === 'stats') {
                         var stats = ['stats'];
                         for (var x in pokemon[i]) {
-                            stats.push( [x, pokemon[i][x]]);
+                            stats.push([x, pokemon[i][x]]);
                         }
 
                         array.push(stats);
@@ -76,8 +76,7 @@ class App extends Component {
                     }
                 }
 
-                console.log(array);
-                //setState({ selectPokemon: array });
+                setState({ selectPokemon: array });
             });
     }
 
@@ -126,13 +125,79 @@ class App extends Component {
     }
 
     renderDetails = selectPokemon => {
+        console.log(selectPokemon);
+
+        /**
+         * TODO: Automate this mess
+         */
         return (
             <div>
-                {selectPokemon.map(item => (
-                    <div className="pokemon_detail" key={item}>
-                        {item[0]}{item[1]}
-                    </div>
+                {/* id */}
+                {selectPokemon[0][0]}: {selectPokemon[0][1]}
+                <br></br>
+
+                {/* name */}
+                {selectPokemon[1][0]}: {selectPokemon[1][1]}
+                <br></br>
+
+                {/* image */}
+                <img src={selectPokemon[2][1]}></img>
+                <br></br>
+
+                {/* types */}
+                {selectPokemon[3][0]}
+                {selectPokemon[3][1].map(item => (
+                    <li key={item[0]}>
+                        {item}
+                    </li>
                 ))}
+                <br></br>
+
+                {/* height */}
+                {selectPokemon[4][0]}: {selectPokemon[4][1]}
+                <br></br>
+
+                {/* weight */}
+                {selectPokemon[5][0]}: {selectPokemon[5][1]}
+                <br></br>
+
+                {/* abilities */}
+                {selectPokemon[6][0]}
+                {selectPokemon[6][1].map(item => (
+                    <li key={item}>
+                        {item}
+                    </li>
+                ))}
+                <br></br>
+
+                {/* egg groups */}
+                {selectPokemon[7][0]}
+                {selectPokemon[7][1].map(item => (
+                    <li key={item}>
+                        {item}
+                    </li>
+                ))}
+                <br></br>
+
+                {/* stats */}
+                {selectPokemon[8][0]}
+                {selectPokemon[8].slice(1).map(item => (
+                    <li key={item}>
+                        {item[0]}: {item[1]}
+                    </li>
+                ))}
+                <br></br>
+
+                {/* genus */}
+                {selectPokemon[9][0]}: {selectPokemon[9][1]}
+                <br></br>
+
+                {/* desc */}
+                {selectPokemon[10][0]}:
+                <p>
+                    {selectPokemon[10][1]}
+                </p>
+                <br></br>
             </div>
         )
     }
@@ -146,43 +211,56 @@ class App extends Component {
 
         return (
             <div>
-                <div className="nav" id="top-nav">
-                    <button onClick={this.pageRev}>
-                        Page Back
-                    </button>
-                    <button onClick={this.pageFwd}>
-                        Page Forward
-                    </button>
-                    {this.state.page}
-                </div>
+                <div className="main">
 
-                POKEMON!
-                {this.state.data === null ?
-                    <div>Loading</div>
-                    :
-                    <div className="pokemon-list">
-                        {/* RENDER LIST CALLED TWICE ON PAGE CHANGE
+
+                    <div className="nav" id="top-nav">
+                        <button onClick={this.pageRev}>
+                            Page Back
+                    </button>
+                        <button onClick={this.pageFwd}>
+                            Page Forward
+                    </button>
+                        {this.state.page}
+                    </div>
+
+                    <h1>
+                        POKEMON LIST!
+                </h1>
+                    {this.state.data === null ?
+                        <div>Loading</div>
+                        :
+                        <div className="pokemon-list">
+                            {/* RENDER LIST CALLED TWICE ON PAGE CHANGE
                             TODO: Block first render on state change?
                         */}
-                        {this.renderList(data)}
-                    </div>
-                }
+                            {this.renderList(data)}
+                        </div>
+                    }
 
-                <div className="nav" id="bottom-nav">
-                    <button onClick={this.pageRev}>
-                        Page Back
+                    <div className="nav" id="bottom-nav">
+                        <button onClick={this.pageRev}>
+                            Page Back
                     </button>
-                    <button onClick={this.pageFwd}>
-                        Page Forward
+                        <button onClick={this.pageFwd}>
+                            Page Forward
                     </button>
-                    {this.state.page}
+                        {this.state.page}
+                    </div>
                 </div>
 
-                <br></br>
-
-                <div>
+                <div className="pokemon_details">
                     {
                         selectPokemon != null ? (
+                            <h1>
+                                POKEMON DETAILS!
+                            </h1>
+                        ) : null
+                    }
+
+                    {
+                        selectPokemon != null ? (
+
                             this.renderDetails(selectPokemon)
                         ) : null
                     }

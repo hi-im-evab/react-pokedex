@@ -10,3 +10,8 @@
 #bottom-nav {
     clear: both;
 }
+
+.main, .pokemon_details {
+    width: 50%;
+    float: left;
+}
