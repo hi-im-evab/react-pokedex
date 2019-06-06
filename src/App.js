@@ -9,11 +9,13 @@ class App extends Component {
             data: null,
             page: 1,
             startPage: 1,
-            endPage: 36
+            endPage: 36,
+            query: ''
         }
         this.pageFwd = this.pageFwd.bind(this);
         this.pageRev = this.pageRev.bind(this);
         this.selectPokemon = null;
+        this.handleChange = this.handleChange.bind(this);
     }
 
     /**
@@ -23,7 +25,7 @@ class App extends Component {
      * JSON to an array that can be used by React's
      * Array.map function.
      */
-    loadPokemon() {
+    loadPokemonList() {
         const setState = this.setState.bind(this);
         const axios = require('axios');
 
@@ -80,6 +82,49 @@ class App extends Component {
             });
     }
 
+    // Handle change in search query
+    // Calls searchPokemon() after 200ms
+    // This delay is to "enhance" UX
+    // TODO: Input validation + cleaning
+    handleChange(event) {
+        var that = this;
+        var query = event.target.value;
+
+        setTimeout(function() {
+            that.searchPokemon(query);
+        }, 200);
+
+        this.setState({query: event.target.value});
+    }
+
+    // Run search of all pokemon
+    // based on name
+    searchPokemon(query) {
+        const setState = this.setState.bind(this);
+        const axios = require('axios');
+
+        // Pokemon objects put into this array
+        var array = [];
+
+        axios.get("https://intern-pokedex.myriadapps.com/api/v1/pokemon?name=" + query)
+            .then(function (response) {
+                for (var i = 0; i < response.data.data.length; i++) {
+                    var pokemon = response.data.data[i];
+                    var types = [];
+
+                    // get pokemon's types
+                    for (var index in pokemon.types) {
+                        types.push(pokemon.types[index]);
+                    }
+
+                    //  push all attributes and types to array
+                    array.push([pokemon.id, pokemon.image, pokemon.name, types]);
+                }
+
+                setState({ data: array });
+            });
+    }
+
     /**
      * Moves page forward 1
      * if not on last page
@@ -88,7 +133,7 @@ class App extends Component {
         if (this.state.page < this.state.endPage) {
             this.setState({ page: this.state.page + 1 },
                 () => {
-                    this.loadPokemon();
+                    this.loadPokemonList();
                 });
         }
     }
@@ -101,13 +146,13 @@ class App extends Component {
         if (this.state.page > this.state.startPage) {
             this.setState({ page: this.state.page - 1 },
                 () => {
-                    this.loadPokemon();
+                    this.loadPokemonList();
                 });
         }
     }
 
     componentDidMount() {
-        this.loadPokemon();
+        this.loadPokemonList();
     }
 
     renderList = data => {
@@ -212,7 +257,7 @@ class App extends Component {
         return (
             <div>
                 <div className="main">
-
+                    <input type="text" value={this.state.query} onChange={this.handleChange}></input>
 
                     <div className="nav" id="top-nav">
                         <button onClick={this.pageRev}>
