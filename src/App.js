@@ -2,6 +2,22 @@ import React, { Component } from 'react';
 import './app.css';
 import './loadDetails';
 
+/**
+ * TODOs
+ * *Things me want do*
+ * - Reorganize code to not exist entirely in one .js file
+ * - Clean up comments
+ * - Snazzy opening animation
+ * - More snazzy animations
+ * *Per Requirements*
+ * - Put page # in URL, open that page on reload
+ * - Put search query into URL
+ * - Use standard browser navigation (will be solved with above two TODOs)
+ * - Make details page into seperate page
+ * - Styling, of course!
+ *    - Use Color Thief to dynamically set primary color depending on pokemon pic
+ */
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +31,9 @@ class App extends Component {
         this.pageFwd = this.pageFwd.bind(this);
         this.pageRev = this.pageRev.bind(this);
         this.selectPokemon = null;
+
         this.handleChange = this.handleChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     /**
@@ -90,11 +108,18 @@ class App extends Component {
         var that = this;
         var query = event.target.value;
 
-        setTimeout(function() {
+        setTimeout(function () {
             that.searchPokemon(query);
         }, 200);
 
-        this.setState({query: event.target.value});
+        this.setState({ query: event.target.value });
+    }
+
+    // Run search on Enter key press
+    handleKeyPress(event) {
+        if (event.key = 'Enter') {
+            this.searchPokemon(event.target.value);
+        }
     }
 
     // Run search of all pokemon
@@ -257,7 +282,7 @@ class App extends Component {
         return (
             <div>
                 <div className="main">
-                    <input type="text" value={this.state.query} onChange={this.handleChange}></input>
+                    <input type="text" value={this.state.query} onChange={this.handleChange} onKeyPress={this.handleKeyPress}></input>
 
                     <div className="nav" id="top-nav">
                         <button onClick={this.pageRev}>
@@ -281,6 +306,12 @@ class App extends Component {
                         */}
                             {this.renderList(data)}
                         </div>
+                    }
+
+                    {this.state.data == '' ?
+                    <div>No results available</div>
+                    :
+                    <div></div>
                     }
 
                     <div className="nav" id="bottom-nav">
