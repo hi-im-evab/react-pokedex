@@ -1,3 +1,9 @@
+Iffin ya wanna check this out but don't know how, these commands oughta do ya:
+`git clone https://github.com/hi-im-evab/react-pokedex.git`
+`npm install`
+`npm run start`
+
+## Generic React Boilerplate README stuff
 This project was bootstrapped with blood, sweat, tears, and [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
